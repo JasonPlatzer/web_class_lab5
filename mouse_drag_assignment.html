@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Events</title>
+
+  <style>
+
+    #canvas {
+      border: 1px black solid;
+    }
+
+  </style>
+
+</head>
+<body>
+
+
+<P>Drag the mouse on the canvas</P>
+<canvas id="canvas" height="400" width="400"></canvas>
+<!-- adds a color input-->
+<input id="colors" type='color'>
+<!-- from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range -->
+<!-- adds a range input sets min, max, and how much to change value of each step of the input change-->
+<input id = "ranges" type="range" min="0" max="100" value="10" step="10">
+<script>
+
+  let canvas = document.querySelector('#canvas')
+  let context = canvas.getContext('2d')
+  let colorInput = document.querySelector('#colors')
+  let rangeInput = document.querySelector('#ranges')
+  
+  // Keep track of whether the mouse button has been pressed down or not.
+  // Think of this as whether the user is drawing or not, is their brush on the canvas?
+  let mousedown = false 
+
+  canvas.addEventListener('mousedown', function() {
+    mousedown = true
+  })
+
+  canvas.addEventListener('mouseup', function() {
+    mousedown = false 
+  })
+
+  // If mouse leaves the canvas then stop drawing
+  canvas.addEventListener('mouseout', function() {
+    mousedown = false
+  })
+
+  canvas.addEventListener('mousemove', function() {
+
+    // If the mouse button is not pressed down, do not draw.
+    if (!mousedown) { return }
+
+    // event is a built-in variable, contains the event that triggered this function
+    // get the x, y location of the event
+    let x = event.offsetX
+    let y = event.offsetY   //offsetX, offsetY, may not work in older browsers
+
+    //Draw a filled rectangle centered under the mouse click
+    //x, y is the top left corner, so shift up and left by 5 to center it under the mouse.
+   
+    // context.fillRect(x-5, y-5, 10, 10)
+    // from https://www.w3schools.com/tags/canvas_arc.asp. I wrote notes wrong from video
+    // makes a circle to move across canvas
+    context.beginPath()
+    // sets size and shape of circle
+    context.arc(x-5, y-5, circleSize, 0, 2 * Math.PI)
+    context.stroke()
+    
+  })
+  // changes color of circle if changed with color input by user selecting color
+  colorInput.addEventListener('change',function(){
+    let  drawColor = colorInput.value
+    context.strokeStyle = drawColor
+    
+    })
+// changes circle size if change by input, sets size of circle by changes of range input
+  rangeInput.addEventListener('change', function(){
+    let bigger = rangeInput.value
+    circleSize = bigger
+    console.log(bigger)
+  
+  })
+// a default size of circle and variable used to change circle size  
+let circleSize = 10
+
+</script>
+
+</body>
+</html>_
